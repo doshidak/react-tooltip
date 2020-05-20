@@ -52,5 +52,5 @@ export default {
     resolve(),
     commonjs()
   ],
-  external: ["prop-types", "uuid"]
+  external: ["prop-types", "@emotion/core", "@emotion/cache"]
 };
