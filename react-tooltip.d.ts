@@ -17,7 +17,6 @@ type GetContent = GetContentFunc | [GetContentFunc, number];
 
 export interface TooltipProps {
   children?: React.ReactNode;
-  uuid?: string;
   // Placement of tooltip
   place?: Place;
   // Tooltip styling theme
@@ -94,7 +93,7 @@ export interface TooltipProps {
   // default = true
   resizeHide?: boolean;
   // The tooltip parent component;
-  // default = 'div' 
+  // default = 'div'
   wrapper?: 'div' | 'span';
   // Listen to body events vs. individual events
   bodyMode?: boolean;
@@ -109,7 +108,7 @@ export interface TooltipProps {
 // ReactTooltip component is the default export
 export default class ReactTooltip extends React.Component<TooltipProps> {
   // static methods
-  static show: (target: string) => {}; 
-  static hide: (target?: string) => {}; 
-  static rebuild: () => {}; 
+  static show: (target: string) => {};
+  static hide: (target?: string) => {};
+  static rebuild: () => {};
 }

@@ -1,6 +1,9 @@
+/** @jsx jsx */
 /* eslint-disable no-unused-vars, dot-notation */
 import React from "react";
 import PropTypes from "prop-types";
+import { CacheProvider, jsx } from "@emotion/core";
+import createCache from "@emotion/cache";
 
 /* Decorators */
 import staticMethods from "./decorators/staticMethods";
@@ -16,7 +19,6 @@ import getPosition from "./utils/getPosition";
 import getTipContent from "./utils/getTipContent";
 import { parseAria } from "./utils/aria";
 import nodeListToArray from "./utils/nodeListToArray";
-import { generateUUID } from "./utils/uuid";
 
 /* CSS */
 import "./index.scss";
@@ -32,7 +34,6 @@ import { generateTooltipStyle } from "./decorators/styler";
 class ReactTooltip extends React.Component {
   static get propTypes() {
     return {
-      uuid: PropTypes.string,
       children: PropTypes.any,
       place: PropTypes.string,
       type: PropTypes.string,
@@ -86,7 +87,6 @@ class ReactTooltip extends React.Component {
     super(props);
 
     this.state = {
-      uuid: props.uuid || generateUUID(),
       place: props.place || "top", // Direction of tooltip
       desiredPlace: props.place || "top",
       type: "dark", // Color theme of tooltip
@@ -130,6 +130,8 @@ class ReactTooltip extends React.Component {
     this.delayHideLoop = null;
     this.delayReshow = null;
     this.intervalUpdateContent = null;
+
+    this.emotionCache = createCache({ key: "tooltip" });
   }
 
   /**
@@ -675,15 +677,15 @@ class ReactTooltip extends React.Component {
     const { extraClass, html, ariaProps, disable } = this.state;
     const content = this.getTooltipContent();
     const isEmptyTip = this.isEmptyTip(content);
-    const style = generateTooltipStyle(this.state.uuid, this.state.customColors, this.state.type, this.state.border);
+    const hasCustomColors = this.hasCustomColors();
+    const style = generateTooltipStyle(this.state.customColors, this.state.type, this.state.border);
 
     const tooltipClass =
       "__react_component_tooltip" +
-      ` ${this.state.uuid}` +
       (this.state.show && !disable && !isEmptyTip ? " show" : "") +
       (this.state.border ? " border" : "") +
       ` place-${this.state.place}` + // top, bottom, left, right
-      ` type-${(this.hasCustomColors() ? "custom" : this.state.type)}` + // dark, success, warning, error, info, light, custom
+      ` type-${(hasCustomColors ? "custom" : this.state.type)}` + // dark, success, warning, error, info, light, custom
       (this.props.delayUpdate ? " allow_hover" : "") +
       (this.props.clickable ? " allow_click" : "");
 
@@ -695,33 +697,24 @@ class ReactTooltip extends React.Component {
 
     const wrapperClassName = [tooltipClass, extraClass].filter(Boolean).join(" ");
 
-    if (html) {
-      const htmlContent = `${content}\n<style>${style}</style>`;
+    const htmlProps = html ? { dangerouslySetInnerHTML: { __html: content } } : {};
+    const children = html || isEmptyTip ? null : content;
 
-      return (
+    return (
+      <CacheProvider value={this.emotionCache}>
         <Wrapper
-          className={`${wrapperClassName}`}
+          className={wrapperClassName}
+          css={style}
           id={this.props.id}
           ref={ref => (this.tooltipRef = ref)}
           {...ariaProps}
           data-id="tooltip"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-        />
-      );
-    } else {
-      return (
-        <Wrapper
-          className={`${wrapperClassName}`}
-          id={this.props.id}
-          {...ariaProps}
-          ref={ref => (this.tooltipRef = ref)}
-          data-id="tooltip"
+          {...htmlProps}
         >
-          <style dangerouslySetInnerHTML={{ __html: style }} />
-          {content}
+          {children}
         </Wrapper>
-      );
-    }
+      </CacheProvider>
+    );
   }
 }
 

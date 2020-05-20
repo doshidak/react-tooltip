@@ -1,35 +1,35 @@
+import { css } from "@emotion/core";
 import { getDefaultPopupColors } from "./defaultStyles";
 
 /**
 * Generates the specific tooltip style for use on render.
 */
-export function generateTooltipStyle(uuid, customColors, type, hasBorder) {
-	return generateStyle(uuid, getPopupColors(customColors, type, hasBorder));
+export function generateTooltipStyle(customColors, type, hasBorder) {
+	return generateStyle(getPopupColors(customColors, type, hasBorder));
 }
 
 /**
  * Generates the tooltip style rules based on the element-specified "data-type" property.
  */
-function generateStyle(uuid, colors) {
+function generateStyle(colors) {
   const textColor = colors.text;
   const backgroundColor = colors.background;
   const borderColor = colors.border;
   const arrowColor = colors.arrow;
 
-  return `
-  	.${uuid} {
-	    color: ${textColor};
-	    background: ${backgroundColor};
-	    border: 1px solid ${borderColor};
-  	}
+  return css`
+    color: ${textColor};
+    background: ${backgroundColor};
+    border: 1px solid ${borderColor};
 
-  	.${uuid}.place-top {
-        margin-top: -10px;
-    }
-    .${uuid}.place-top::before {
+  	&.place-top {
+      margin-top: -10px;
+
+      &::before {
         border-top: 8px solid ${borderColor};
-    }
-    .${uuid}.place-top::after {
+      }
+
+      &::after {
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
         bottom: -6px;
@@ -38,15 +38,17 @@ function generateStyle(uuid, colors) {
         border-top-color: ${arrowColor};
         border-top-style: solid;
         border-top-width: 6px;
+      }
     }
 
-    .${uuid}.place-bottom {
-        margin-top: 10px;
-    }
-    .${uuid}.place-bottom::before {
+    &.place-bottom {
+      margin-top: 10px;
+
+      &::before {
         border-bottom: 8px solid ${borderColor};
-    }
-    .${uuid}.place-bottom::after {
+      }
+
+      &::after {
         border-left: 8px solid transparent;
         border-right: 8px solid transparent;
         top: -6px;
@@ -55,15 +57,17 @@ function generateStyle(uuid, colors) {
         border-bottom-color: ${arrowColor};
         border-bottom-style: solid;
         border-bottom-width: 6px;
+      }
     }
 
-    .${uuid}.place-left {
-        margin-left: -10px;
-    }
-    .${uuid}.place-left::before {
+    &.place-left {
+      margin-left: -10px;
+
+      &::before {
         border-left: 8px solid ${borderColor};
-    }
-    .${uuid}.place-left::after {
+      }
+
+      &::after {
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
         right: -6px;
@@ -72,15 +76,17 @@ function generateStyle(uuid, colors) {
         border-left-color: ${arrowColor};
         border-left-style: solid;
         border-left-width: 6px;
+      }
     }
 
-    .${uuid}.place-right {
-        margin-left: 10px;
-    }
-    .${uuid}.place-right::before {
+    &.place-right {
+      margin-left: 10px;
+
+      &::before {
         border-right: 8px solid ${borderColor};
-    }
-    .${uuid}.place-right::after {
+      }
+
+      &::after {
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
         left: -6px;
@@ -89,6 +95,7 @@ function generateStyle(uuid, colors) {
         border-right-color: ${arrowColor};
         border-right-style: solid;
         border-right-width: 6px;
+      }
     }
   `;
 }
