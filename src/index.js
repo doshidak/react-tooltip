@@ -1,8 +1,7 @@
-/** @jsx jsx */
 /* eslint-disable no-unused-vars, dot-notation */
 import React from "react";
 import PropTypes from "prop-types";
-import { CacheProvider, jsx } from "@emotion/core";
+import { CacheProvider } from "@emotion/core";
 import createCache from "@emotion/cache";
 
 /* Decorators */
@@ -79,6 +78,10 @@ class ReactTooltip extends React.Component {
     clickable: false
   };
 
+  static emotionCache = createCache({
+    key: "tooltip"
+  });
+
   static supportedWrappers = ["div", "span"];
 
   static displayName = "ReactTooltip";
@@ -130,8 +133,6 @@ class ReactTooltip extends React.Component {
     this.delayHideLoop = null;
     this.delayReshow = null;
     this.intervalUpdateContent = null;
-
-    this.emotionCache = createCache({ key: "tooltip" });
   }
 
   /**
@@ -701,7 +702,7 @@ class ReactTooltip extends React.Component {
     const children = html || isEmptyTip ? null : content;
 
     return (
-      <CacheProvider value={this.emotionCache}>
+      <CacheProvider value={ReactTooltip.emotionCache}>
         <Wrapper
           className={wrapperClassName}
           css={style}
