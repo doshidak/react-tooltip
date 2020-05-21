@@ -896,7 +896,7 @@ function getTipContent (tip, children, getContent, multiline) {
 
 
   return tip.split(regexp).map(function (d, i) {
-    return React.createElement("span", {
+    return core.jsx("span", {
       key: i,
       className: "multi-line"
     }, d);
@@ -1131,9 +1131,6 @@ function (_React$Component) {
     _this.delayHideLoop = null;
     _this.delayReshow = null;
     _this.intervalUpdateContent = null;
-    _this.emotionCache = createCache({
-      key: "tooltip"
-    });
     return _this;
   }
   /**
@@ -1694,7 +1691,7 @@ function (_React$Component) {
       } : {};
       var children = html || isEmptyTip ? null : content;
       return core.jsx(core.CacheProvider, {
-        value: this.emotionCache
+        value: ReactTooltip.emotionCache
       }, core.jsx(Wrapper, _extends({
         className: wrapperClassName,
         css: style,
@@ -1731,7 +1728,9 @@ function (_React$Component) {
   resizeHide: true,
   wrapper: "div",
   clickable: false
-}), _defineProperty(_class2, "supportedWrappers", ["div", "span"]), _defineProperty(_class2, "displayName", "ReactTooltip"), _temp)) || _class) || _class) || _class) || _class) || _class) || _class) || _class;
+}), _defineProperty(_class2, "emotionCache", createCache({
+  key: "tooltip"
+})), _defineProperty(_class2, "supportedWrappers", ["div", "span"]), _defineProperty(_class2, "displayName", "ReactTooltip"), _temp)) || _class) || _class) || _class) || _class) || _class) || _class) || _class;
 
 module.exports = ReactTooltip;
 //# sourceMappingURL=index.js.map

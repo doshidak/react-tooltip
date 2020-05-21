@@ -16,7 +16,7 @@ function ___$insertStyle(css) {
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css, jsx, CacheProvider } from '@emotion/core';
+import { jsx, css, CacheProvider } from '@emotion/core';
 import createCache from '@emotion/cache';
 
 function _classCallCheck(instance, Constructor) {
@@ -890,7 +890,7 @@ function getTipContent (tip, children, getContent, multiline) {
 
 
   return tip.split(regexp).map(function (d, i) {
-    return React.createElement("span", {
+    return jsx("span", {
       key: i,
       className: "multi-line"
     }, d);
@@ -1125,9 +1125,6 @@ function (_React$Component) {
     _this.delayHideLoop = null;
     _this.delayReshow = null;
     _this.intervalUpdateContent = null;
-    _this.emotionCache = createCache({
-      key: "tooltip"
-    });
     return _this;
   }
   /**
@@ -1688,7 +1685,7 @@ function (_React$Component) {
       } : {};
       var children = html || isEmptyTip ? null : content;
       return jsx(CacheProvider, {
-        value: this.emotionCache
+        value: ReactTooltip.emotionCache
       }, jsx(Wrapper, _extends({
         className: wrapperClassName,
         css: style,
@@ -1725,7 +1722,9 @@ function (_React$Component) {
   resizeHide: true,
   wrapper: "div",
   clickable: false
-}), _defineProperty(_class2, "supportedWrappers", ["div", "span"]), _defineProperty(_class2, "displayName", "ReactTooltip"), _temp)) || _class) || _class) || _class) || _class) || _class) || _class) || _class;
+}), _defineProperty(_class2, "emotionCache", createCache({
+  key: "tooltip"
+})), _defineProperty(_class2, "supportedWrappers", ["div", "span"]), _defineProperty(_class2, "displayName", "ReactTooltip"), _temp)) || _class) || _class) || _class) || _class) || _class) || _class) || _class;
 
 export default ReactTooltip;
 //# sourceMappingURL=index.es.js.map
